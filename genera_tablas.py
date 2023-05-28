@@ -107,7 +107,7 @@ class Tipo_acceso(Base):
 
 class Institucion(Base):
     __tablename__ = 'institucion'
-    cod = Column(String(10), primary_key=True)
+    cod = Column(String(20), primary_key=True)
     nombre = Column(String(550))
     num_est = Column(Integer)
     num_doc = Column(Integer)
