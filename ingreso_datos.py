@@ -11,131 +11,80 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
+data = open('data/ins_educativas.csv', 'r', encoding="utf-8")
+lineas = data.readlines()
+    
 
 
 # proceso para tipo de acceso acceso
-accesos = open('data/accesos.csv', "r", encoding="utf-8")
-lineas = accesos.readlines()
+
 lista = [l.replace("\n", "").replace("\ufeff", "").split(";") for l in lineas]
 
-
+tipos_accesos = []
 for l in lista:
-        obj = Tipo_acceso(id = int(l[1]), descripcion = l[0])
+
+        tipos_accesos.append(l[13])
+
+
+unique_tipos = []
+for sweet in tipos_accesos:
+  if sweet not in unique_tipos:
+    unique_tipos.append(sweet)
+
+
+for l in range (0, len(unique_tipos[1:])):
+        obj = Tipo_acceso(id = int(l+1), descripcion = unique_tipos[1:][l])
         session.add(obj)
+        print(obj.id)
 
-accesos.close()
 
+
+# provincias::
+
+provincias = []
+for l in lista:
+        tupla = (l[2], l[3])
+        provincias.append(tupla)
+
+provincias_unicas = []
+for sweet in provincias:
+  if sweet not in provincias_unicas:
+    provincias_unicas.append(sweet)
+
+provincias_unicas = provincias_unicas[1:]
+
+
+for l in provincias_unicas:
+        obj = Provincia(cod = int(l[0]), provincia = l[1])
+        session.add(obj)
+        print()
 
 
 # proceso para distritos
-archivo = open('data/distritos.csv', "r", encoding="utf-8")
-lineas = archivo.readlines()
-lista = [l.replace("\n", "").replace("\ufeff", "").split(";") for l in lineas]
 
 
+distritos = []
 for l in lista:
-        obj = Distrito(id = int(l[1]), descripcion = l[0])
+        print(l[8])
+#       
+        distritos.append(l[8])
+
+distritos_unicos = []
+for sweet in distritos:
+  if sweet not in distritos_unicos:
+    distritos_unicos.append(sweet)
+
+distritos_unicos = distritos_unicos[1:]
+
+
+for l in range(0, len(distritos_unicos)):
+        obj = Distrito(id = l+1, descripcion = distritos_unicos[l])
         session.add(obj)
-
-
-archivo.close()
-
-
-# proceso para provincias
-archivo = open('data/provincias.csv', "r", encoding="utf-8")
-lineas = archivo.readlines()
-lista = [l.replace("\n", "").replace("\ufeff", "").split(";") for l in lineas]
-
-
-for l in lista:
-        obj = Provincia(cod = int(l[0]), provincia = l[1])
-        session.add(obj)
-
-archivo.close()
+        print()
 
 
 
 
-# proceso para tipos_educacion
-archivo = open('data/tipos_educacion.csv', "r", encoding="utf-8")
-lineas = archivo.readlines()
-lista = [l.replace("\n", "").replace("\ufeff", "").replace("Ã³", "ó").split(";") for l in lineas]
-
-
-for l in lista:
-        obj = Tipos_educacion(id = int(l[1]), descripcion = l[0])
-        session.add(obj)
-
-archivo.close()
-
-
-# proceso para tipos sostenimiento
-archivo = open('data/tipos_sostenimiento.csv', "r", encoding="utf-8")
-lineas = archivo.readlines()
-lista = [l.replace("\n", "").replace("\ufeff", "").replace("Ã³", "ó").split(";") for l in lineas]
-
-
-for l in lista:
-        obj = Tipos_sostenimiento(id = int(l[1]), descripcion = l[0])
-        session.add(obj)
-
-
-archivo.close()
-
-
-# proceso para tipos cantones
-archivo = open('data/cantones.csv', "r", encoding="utf-8")
-lineas = archivo.readlines()
-lista = [l.replace("\n", "").replace("\ufeff", "").replace("Ã³", "ó").split(";") for l in lineas]
-
-
-for l in lista:
-        prov = session.query(Provincia).filter_by(cod=int(l[2])).one()
-        dist = session.query(Distrito).filter_by(id=int(l[3])).one()
-        obj = Canton(cod = int(l[0]), canton = l[1], provincia = prov, distrito = dist)
-        session.add(obj)
-
-
-archivo.close()
-
-
-# proceso para tipos parroquias
-archivo = open('data/parroquias.csv', "r", encoding="utf-8")
-lineas = archivo.readlines()
-lista = [l.replace("\n", "").replace("\ufeff", "").replace("Ã³", "ó").split(";") for l in lineas]
-
-
-for l in lista:
-        cant = session.query(Canton).filter_by(cod=int(l[2])).one()
-        
-        obj = Parroquia(cod = int(l[0]), parroquia = l[1], canton = cant)
-        session.add(obj)
-
-
-archivo.close()
-
-
-# proceso para tipos instituciones
-archivo = open('data/instituciones.csv', "r", encoding="utf-8")
-lineas = archivo.readlines()
-lista = [l.replace("\n", "").replace("\ufeff", "").replace("Ã³", "ó").replace("Ã‘", "ñ").split(";") for l in lineas]
-
-
-for l in lista:
-        parr = session.query(Parroquia).filter_by(cod=int(l[7])).one()
-        acce = session.query(Tipo_acceso).filter_by(id=int(l[4])).one()
-        sost = session.query(Tipos_sostenimiento).filter_by(id=int(l[5])).one()
-        teduc = session.query(Tipos_educacion).filter_by(id=int(l[6])).one()
-        
-
-        if teduc and   acce and sost and parr:
-
-                
-                obj = Institucion(cod = l[0], nombre = l[1], num_est = int(l[2]), num_doc = int(l[3]),modalidad = l[8], jornada=l[9],parroquia= parr, tipo_acceso=acce, tipos_sostenimiento = sost,   tipos_educacion=teduc )
-
-                session.add(obj)
-
-
-archivo.close()
+data.close()
 
 session.commit()
