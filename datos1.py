@@ -14,7 +14,7 @@ session = Session()
 inst = session.query(Institucion).filter(Institucion.id_parroquia==110553 ).all()
  
 for i in inst:
-    print(f"Inst: {i}, Prov: {i.parroquia}, Cant: {i.parroquia.canton}, Prov: {i.parroquia.canton.provincia}")
+    print(f"Inst: {i}, Parr: {i.parroquia}, Cant: {i.parroquia.canton}, Prov: {i.parroquia.canton.provincia}")
 
 
 print("------------------------------------------------------")
