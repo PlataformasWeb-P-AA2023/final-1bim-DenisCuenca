@@ -16,10 +16,12 @@ for i in inst:
     print(f"Int: {i} - Jornada: {i.jornada}")
 
 
+print("------------------------------------------------------")
 # Los cantones que tiene establecimientos como número de estudiantes tales como: 448, 450, 451, 454, 458, 459
 
 cant = session.query(Canton).join(Parroquia).join(Institucion).\
         filter(or_(Institucion.num_est == 448, Institucion.num_est == 450, Institucion.num_est == 451, Institucion.num_est == 454, Institucion.num_est == 458, Institucion.num_est == 459)).all()
      
 
-print(cant)
+for i in cant:  
+    print(i)

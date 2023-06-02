@@ -13,12 +13,15 @@ session = Session()
 cant = session.query(Canton).join(Parroquia).join(Institucion).\
         filter(or_(Institucion.num_doc == 0, Institucion.num_doc == 5, Institucion.num_doc == 11)).all()
      
-print(cant)
+for i in cant:
+    print(i)
 
-print("..........................")
+
+print("------------------------------------------------------")
 
 # Los establecimientos que pertenecen a la parroquia Pindal con estudiantes mayores o iguales a 21
 cant = session.query(Institucion).join(Parroquia).\
         filter(Parroquia.parroquia == "PINDAL").filter(Institucion.num_est >= 21).all()
 
-print(cant)
+for i in cant:
+    print(i)

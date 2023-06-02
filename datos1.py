@@ -13,7 +13,8 @@ session = Session()
 # Todos los establecimientos que pertenecen al Código División Política Administrativa Parroquia con valor 110553
 inst = session.query(Institucion).filter(Institucion.id_parroquia==110553 ).all()
  
-print(inst)
+for i in inst:
+    print(i)
 
 
 print("------------------------------------------------------")
